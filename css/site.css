@@ -1,0 +1,631 @@
+/* Solidus Commodities DMCC — one-page site.
+   Palette and rules locked per SC/BRD/CP0001 v1.2 + DB0002 v2: five colours, no gradients,
+   no shadows, no blur, no dark mode, radius 0 (2px inputs only). */
+
+:root {
+  --ink: #1A1512;
+  --paper: #F5F1E8;
+  --porphyry: #552936;
+  --hairline: #DDD5C4;
+  --muted: #7A7264;
+  --ghost: #D4D0C8; /* 15% Ink flattened onto Paper, pre-computed */
+
+  --font-display: 'Fraunces', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-text: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --axes-display: 'opsz' 144, 'SOFT' 60, 'WONK' 0;
+  --weight-display: 460;
+}
+
+html {
+  color-scheme: light only;
+}
+
+body {
+  margin: 0;
+  border-top: 3px solid var(--ink); /* document-top rule */
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.75;
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+p { text-wrap: pretty; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+a { color: var(--ink); }
+a:hover { color: var(--porphyry); }
+::selection { background: var(--porphyry); color: var(--paper); }
+:focus-visible { outline: 2px solid var(--porphyry); outline-offset: 2px; }
+
+/* ---- Monogram ---- */
+
+.monogram {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-variation-settings: var(--axes-display);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  font-size: 30px;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.slash {
+  height: 0.78em;
+  width: auto;
+  display: inline-block;
+  vertical-align: -0.07em;
+  margin: 0 0.08em;
+}
+
+.slash line {
+  stroke: var(--porphyry);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 96; /* line length ≈ 95.9 — enables the draw-on */
+}
+
+/* The slash is drawn, not typed — the header mark draws itself once at load. */
+.slash-pre line { stroke-dashoffset: 96; }
+.slash-drawn line {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.6s ease-out 0.15s;
+}
+
+.monogram-small { font-size: 13px; } /* 44% of the 30px avatar */
+
+.monogram-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+}
+
+/* ---- Header ---- */
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--hairline);
+  position: relative;
+  z-index: 3;
+  background: var(--paper);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.nav-link:hover { color: var(--porphyry); }
+
+.nav-sep { color: var(--muted); }
+
+/* ---- Hero — pinned film (cinema settles into document) ----
+   Static (no JS / reduced motion): the settled framed panel.
+   JS pins the section (1.9 viewports tall) and scrubs scale from full-bleed to frame. */
+
+.hero { background: var(--paper); }
+
+.hero-sticky {
+  padding: 56px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-box {
+  margin: 0;
+  width: min(1008px, 100%);
+  aspect-ratio: 21 / 9;
+  position: relative;
+  border: 1px solid var(--hairline);
+  box-sizing: border-box;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  overflow: hidden;
+}
+
+.hero-box img,
+.hero-box video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--paper);
+}
+
+.hero-box img { object-fit: contain; } /* lockup ground is Paper — frames seamlessly */
+.hero-box video { object-fit: cover; }
+
+/* ---- Scroll cue — appears when the film ends, dismissed by the first scroll ----
+   No text over the film and no icons: the cue is the house device, a rule with round
+   terminals that draws itself downward. JS-created; never present under reduced motion. */
+
+.scroll-cue {
+  /* fixed, not absolute: the sticky stage hangs below the fold by the header's
+     height until the pin engages, which would push an absolute cue off-screen */
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+  pointer-events: none;
+}
+
+.scroll-cue.cue-on { opacity: 1; }
+.scroll-cue.cue-off { opacity: 0; }
+
+.scroll-cue svg {
+  display: block;
+  width: 8px;
+  height: 44px;
+  overflow: visible;
+}
+
+.scroll-cue line {
+  stroke: var(--porphyry);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+}
+
+.scroll-cue.cue-on line {
+  animation: cue-draw 2.4s ease-out infinite;
+}
+
+@keyframes cue-draw {
+  0%   { stroke-dashoffset: 40; opacity: 0; }
+  12%  { opacity: 1; }
+  45%  { stroke-dashoffset: 0; opacity: 1; }
+  70%  { stroke-dashoffset: 0; opacity: 1; }
+  92%  { stroke-dashoffset: 0; opacity: 0; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* ---- Reveal machinery ----
+   JS arms off-screen elements with .rv and fires .rv-in once on entry; --rv-delay
+   staggers batches. Without JS (or under reduced motion) nothing is ever hidden. */
+
+.rv:not(.crow):not(.pair-item) {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.rv.rv-in:not(.crow):not(.pair-item) {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.4s ease-out var(--rv-delay, 0ms),
+    transform 0.4s ease-out var(--rv-delay, 0ms);
+}
+
+/* ---- Section heading pattern ---- */
+
+.section-head {
+  border-top: 1px solid var(--hairline);
+  padding-top: 16px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* The rule draws in: a Paper cover over the hairline retracts to the right.
+   Default is uncovered, so the rule is always present without JS. */
+.section-head::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--paper);
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+}
+
+.rv .section-head::after,
+.section-head.rv::after { transform: scaleX(1); }
+
+.rv.rv-in .section-head::after,
+.section-head.rv.rv-in::after {
+  transform: scaleX(0);
+  transition: transform 0.6s ease-out var(--rv-delay, 0ms);
+}
+
+.section-head-tight { margin-bottom: 0; }
+
+.section-head h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ---- The firm ---- */
+
+.firm {
+  max-width: 664px;
+  margin: 0 auto;
+  padding: 80px 28px 0;
+  box-sizing: content-box;
+}
+
+.firm p { margin: 0; max-width: 62ch; }
+.firm p + p { margin-top: 1em; }
+
+.firm .firm-note {
+  margin-top: 44px;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 58ch;
+}
+
+/* ---- Commodities — editorial index ---- */
+
+.commodities { padding-top: 112px; }
+
+.commodities-intro {
+  max-width: 664px;
+  margin: 0 auto;
+  padding: 0 28px;
+  box-sizing: content-box;
+}
+
+.commodities-intro p { margin: 0; max-width: 62ch; }
+
+.commodity-rows {
+  max-width: 1200px;
+  margin: 128px auto 0;
+  padding: 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 140px;
+  box-sizing: content-box;
+}
+
+.crow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 40px 72px;
+  align-items: center;
+}
+
+.crow-text {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.crow-text-mirror {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.crow-num {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-variation-settings: var(--axes-display);
+  font-size: clamp(6rem, 11vw, 10rem);
+  line-height: 0.9;
+  color: var(--ghost);
+  transition: color 0.3s ease-out;
+}
+
+.crow-num.is-current { color: var(--porphyry); } /* the in-view row's numeral */
+
+.crow-name {
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+
+.crow-text p { margin: 2px 0 0; max-width: 40ch; }
+
+.crow-media {
+  justify-self: end;
+  width: 100%;
+  max-width: 460px;
+}
+
+.crow-media-left { justify-self: start; }
+
+.crow-frame {
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--ink); /* the plate rule — photographs sit in Ink frames */
+  box-sizing: border-box;
+  will-change: transform;
+  overflow: hidden;
+}
+
+/* ---- Condensed pairs — full spread / pair / full spread / pair cadence ---- */
+
+.crow-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 56px 72px;
+  align-items: start;
+}
+
+.pair-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pair-item .crow-frame {
+  aspect-ratio: 1 / 1; /* square plates — a second format, not a smaller copy */
+  width: 100%;
+  align-self: stretch;
+}
+
+.pair-item .crow-num {
+  font-size: clamp(3.5rem, 5vw, 5rem);
+}
+
+.pair-item p { margin: 2px 0 0; max-width: 40ch; }
+
+.crow-pair-mirror .pair-item {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.crow-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- Row arrival choreography (once per row) ----
+   Numeral, then name, then the line, while the photograph settles into its frame. */
+
+.crow.rv .crow-num,
+.pair-item.rv .crow-num {
+  transition:
+    opacity 0.5s ease-out var(--rv-delay, 0ms),
+    transform 0.5s ease-out var(--rv-delay, 0ms),
+    color 0.3s ease-out;
+}
+
+.crow.rv .crow-name,
+.pair-item.rv .crow-name {
+  transition:
+    opacity 0.5s ease-out calc(var(--rv-delay, 0ms) + 90ms),
+    transform 0.5s ease-out calc(var(--rv-delay, 0ms) + 90ms);
+}
+
+.crow.rv .crow-text p,
+.pair-item.rv p {
+  transition:
+    opacity 0.5s ease-out calc(var(--rv-delay, 0ms) + 180ms),
+    transform 0.5s ease-out calc(var(--rv-delay, 0ms) + 180ms);
+}
+
+.crow.rv .crow-frame img,
+.pair-item.rv .crow-frame img {
+  transition:
+    opacity 0.6s ease-out var(--rv-delay, 0ms),
+    transform 0.6s ease-out var(--rv-delay, 0ms);
+}
+
+.crow.rv:not(.rv-in) .crow-num,
+.pair-item.rv:not(.rv-in) .crow-num { opacity: 0; transform: translateY(12px); }
+.crow.rv:not(.rv-in) .crow-name,
+.crow.rv:not(.rv-in) .crow-text p,
+.pair-item.rv:not(.rv-in) .crow-name,
+.pair-item.rv:not(.rv-in) p { opacity: 0; transform: translateY(10px); }
+.crow.rv:not(.rv-in) .crow-frame img,
+.pair-item.rv:not(.rv-in) .crow-frame img { opacity: 0; transform: scale(1.04); }
+
+/* ---- Compliance — sticky title, stamped register ---- */
+
+.compliance {
+  max-width: 1008px;
+  margin: 0 auto;
+  padding: 128px 28px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 64px;
+  align-items: flex-start;
+  box-sizing: content-box;
+}
+
+.compliance-title {
+  flex: 1 1 220px;
+  min-width: 220px;
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  padding-bottom: 8px;
+}
+
+.compliance-register { flex: 2.4 1 400px; }
+
+.register {
+  margin: 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.register-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 28px;
+  border-top: 1px solid var(--hairline);
+  padding: 14px 0;
+}
+
+/* Compliance rows: each rule draws in with its stamp (Paper cover retracts right). */
+[data-comp-row] { position: relative; }
+
+[data-comp-row]::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--paper);
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+}
+
+[data-comp-row].rv::after { transform: scaleX(1); }
+
+[data-comp-row].rv.rv-in::after {
+  transform: scaleX(0);
+  transition: transform 0.6s ease-out var(--rv-delay, 0ms);
+}
+
+.register-row-first { border-top: 0; }
+
+.register-row dt {
+  flex: 0 0 208px;
+  font-weight: 500; /* no text-transform — "goAML" casing survives */
+}
+
+.register-row dd {
+  flex: 1 1 260px;
+  margin: 0;
+}
+
+.register-close { margin: 28px 0 0; max-width: 62ch; }
+
+/* ---- Company details — zero motion ---- */
+
+.company {
+  max-width: 664px;
+  margin: 0 auto;
+  padding: 128px 28px 0;
+  box-sizing: content-box;
+}
+
+/* ---- Footer — zero motion ---- */
+
+.site-footer {
+  max-width: 664px;
+  margin: 96px auto 0;
+  padding: 24px 28px 56px;
+  box-sizing: content-box;
+}
+
+.footer-inner {
+  border-top: 1px solid var(--hairline);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-text { flex: 1 1 380px; }
+
+.footer-text p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+
+.footer-text p + p { margin-top: 6px; }
+
+/* ---- Anchors land clear of the top edge ---- */
+
+#commodities,
+#company-details { scroll-margin-top: 24px; }
+
+/* ---- Large screens: the document scales as a sheet ----
+   Composition and measure are locked (664/1008/1200 columns, 62ch); on wide viewports the
+   whole sheet enlarges proportionally instead of drowning in Paper. Stepped fallback here;
+   site.js refines it to a continuous scale (viewport / 1360, capped 2.6). */
+
+@media (min-width: 1440px) { body { zoom: 1.06; } }
+@media (min-width: 1600px) { body { zoom: 1.18; } }
+@media (min-width: 1760px) { body { zoom: 1.29; } }
+@media (min-width: 1920px) { body { zoom: 1.41; } }
+@media (min-width: 2240px) { body { zoom: 1.65; } }
+@media (min-width: 2560px) { body { zoom: 1.88; } }
+@media (min-width: 3000px) { body { zoom: 2.21; } }
+@media (min-width: 3440px) { body { zoom: 2.53; } }
+@media (min-width: 3840px) { body { zoom: 2.6; } }
+
+/* ---- Reduced motion: the static settled document ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- Print: the page is a document — print it as one ---- */
+
+@media print {
+  body { zoom: 1 !important; }
+  .hero { display: none; }
+  .rv, .rv * { opacity: 1 !important; transform: none !important; }
+  .section-head::after,
+  [data-comp-row]::after { display: none; } /* rules print uncovered */
+  .compliance-title { position: static; }
+  .crow-frame { break-inside: avoid; }
+  .register-row { break-inside: avoid; }
+}
