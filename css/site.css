@@ -113,7 +113,8 @@ a:hover { color: var(--porphyry); }
   gap: 8px 32px;
   padding: 14px 28px;
   border-bottom: 1px solid var(--hairline);
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 3;
   background: var(--paper);
 }
@@ -493,7 +494,7 @@ a:hover { color: var(--porphyry); }
   flex: 1 1 220px;
   min-width: 220px;
   position: sticky;
-  top: 0;
+  top: var(--header-h, 0px); /* holds below the sticky letterhead */
   background: var(--paper);
   padding-bottom: 8px;
 }
@@ -591,7 +592,7 @@ a:hover { color: var(--porphyry); }
 /* ---- Anchors land clear of the top edge ---- */
 
 #commodities,
-#company-details { scroll-margin-top: 24px; }
+#company-details { scroll-margin-top: calc(var(--header-h, 0px) + 24px); }
 
 /* ---- Large screens: the document scales as a sheet ----
    Composition and measure are locked (664/1008/1200 columns, 62ch); on wide viewports the

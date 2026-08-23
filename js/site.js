@@ -6,9 +6,24 @@
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var config = window.SOLIDUS_CONFIG || {};
+  var heroActive = false;
+
+  /* The letterhead is sticky; downstream offsets (compliance title, anchors) read its height. */
+  function setHeaderVar() {
+    var h = document.querySelector('.site-header');
+    if (h) document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
+  }
+
+  /* The cinema pin needs a landscape stage: a 21:9 frame cannot cover a portrait
+     viewport without cropping the resting logo frame to a sliver. Portrait gets
+     the settled framed panel directly under the letterhead. */
+  function shouldPin() {
+    return window.innerWidth > window.innerHeight && window.innerWidth >= 752;
+  }
 
   setupScale();
-  window.addEventListener('resize', setupScale);
+  setHeaderVar();
+  window.addEventListener('resize', function () { setupScale(); setHeaderVar(); });
   setupVideo();
   if (reduce) return; /* static settled document — no pin, no drift, no reveals */
 
@@ -69,15 +84,27 @@
     var wrap = document.querySelector('[data-hero-sticky]');
     var box = document.querySelector('[data-hero-box]');
     if (!sec || !wrap || !box) return null;
-    wrap.style.position = 'sticky';
-    wrap.style.top = '0';
-    wrap.style.overflow = 'hidden';
-    wrap.style.padding = '0 28px';
     box.style.willChange = 'transform';
+    var svh = window.CSS && CSS.supports && CSS.supports('height', '100svh');
     /* vh units multiply under body{zoom}, so the pinned heights are set in
        real pixels divided by zoom — the wrapper must render exactly one viewport. */
-    var svh = window.CSS && CSS.supports && CSS.supports('height', '100svh');
     function applyHeights() {
+      heroActive = shouldPin();
+      if (!heroActive) {
+        /* portrait: static settled panel (the CSS default layout) */
+        sec.style.height = '';
+        wrap.style.position = '';
+        wrap.style.top = '';
+        wrap.style.height = '';
+        wrap.style.overflow = '';
+        wrap.style.padding = '';
+        box.style.transform = '';
+        return;
+      }
+      wrap.style.position = 'sticky';
+      wrap.style.top = '0';
+      wrap.style.overflow = 'hidden';
+      wrap.style.padding = '0 28px';
       var z = pageZoom();
       if (z > 1) {
         sec.style.height = (window.innerHeight * 1.9 / z).toFixed(2) + 'px';
@@ -91,6 +118,7 @@
     applyHeights();
     var s0 = 1;
     function measure() {
+      if (!heroActive) return;
       /* offsetWidth/Height are pre-zoom local px; scale by page zoom to compare
          against the real viewport. */
       var z = pageZoom();
@@ -102,6 +130,7 @@
     var ticking = false;
     function update() {
       ticking = false;
+      if (!heroActive) return;
       /* All in visual (post-zoom) units: rect height vs real viewport. */
       var rect = sec.getBoundingClientRect();
       var range = rect.height - window.innerHeight;
@@ -181,6 +210,7 @@
     cue.innerHTML = '<svg viewBox="0 0 8 44" focusable="false"><line x1="4" y1="2" x2="4" y2="42"/></svg>';
     wrap.appendChild(cue);
     video.addEventListener('ended', function () {
+      if (!heroActive) return; /* no pinned stage — no prompt */
       if (window.scrollY > 40) return; /* already reading — no prompt */
       cue.classList.add('cue-on');
       window.addEventListener('scroll', function () {
