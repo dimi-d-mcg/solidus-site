@@ -6,7 +6,9 @@ and settles, section by section, into a document.
 
 Built from the design handoff `design_handoff_solidus_site` (art direction DB0002 v2; copy fixed
 verbatim per SC/BRD/CP0001 v1.2, 22 Aug 2026). **No text may be added without sign-off.**
-Em-dashes (—) are deliberate placeholders that fill at incorporation — never "TBD".
+Client amendment 23 Aug 2026: the em-dash constructions in the firm paragraphs were rewritten
+dash-free. Em-dashes that remain in the registers are deliberate placeholders that fill at
+incorporation — never "TBD".
 
 ## Stack & deployment
 
