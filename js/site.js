@@ -237,24 +237,16 @@ window.SOLIDUS_CONFIG = {
     cue.setAttribute('aria-hidden', 'true');
     cue.innerHTML = '<svg viewBox="0 0 8 44" focusable="false"><line x1="4" y1="2" x2="4" y2="42"/></svg>';
     wrap.appendChild(cue);
-    /* the film loops, so 'ended' never fires — the cue appears when the first
-       loop completes (currentTime wraps back toward zero) */
-    var last = 0;
-    var fired = false;
-    video.addEventListener('timeupdate', function () {
-      if (fired) return;
-      var t = video.currentTime;
-      if (t < last - 5) {
-        fired = true;
-        if (window.scrollY > 40) return; /* already reading — no prompt */
-        cue.classList.add('cue-on');
-        window.addEventListener('scroll', function () {
-          cue.classList.remove('cue-on');
-          cue.classList.add('cue-off');
-        }, { once: true, passive: true });
-      }
-      last = t;
-    });
+    /* a plain timer — 27s after load, roughly the film's first pass — so the cue
+       appears even where autoplay is blocked (e.g. iOS Low Power Mode) */
+    setTimeout(function () {
+      if (window.scrollY > 40) return; /* already reading — no prompt */
+      cue.classList.add('cue-on');
+      window.addEventListener('scroll', function () {
+        cue.classList.remove('cue-on');
+        cue.classList.add('cue-off');
+      }, { once: true, passive: true });
+    }, 27000);
   }
 
   /* Hero film — wired once the asset exists (SOLIDUS_CONFIG.heroFilmSrc).
