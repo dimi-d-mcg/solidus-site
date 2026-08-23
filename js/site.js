@@ -8,6 +8,14 @@
   var config = window.SOLIDUS_CONFIG || {};
   var heroActive = false;
 
+  /* The page always opens at the top — the film is the opening statement.
+     Deep links to anchors are respected. */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) window.scrollTo(0, 0);
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted && !location.hash) window.scrollTo(0, 0);
+  });
+
   /* The letterhead is sticky; downstream offsets (compliance title, anchors) read its height. */
   function setHeaderVar() {
     var h = document.querySelector('.site-header');
@@ -24,6 +32,7 @@
   setupScale();
   setHeaderVar();
   window.addEventListener('resize', function () { setupScale(); setHeaderVar(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderVar);
   setupVideo();
   if (reduce) return; /* static settled document — no pin, no drift, no reveals */
 

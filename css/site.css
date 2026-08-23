@@ -200,6 +200,12 @@ a:hover { color: var(--porphyry); }
     max-width: none;
     border: 0;
   }
+  /* the sticky register title is a desktop conceit — on portrait it hovers
+     over the rows as they pass; static reads correctly */
+  .compliance .compliance-title {
+    position: static;
+    padding-bottom: 0;
+  }
 }
 
 /* ---- Scroll cue — appears when the film ends, dismissed by the first scroll ----
