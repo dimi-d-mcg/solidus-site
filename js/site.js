@@ -242,10 +242,15 @@ window.SOLIDUS_CONFIG = {
     setTimeout(function () {
       if (window.scrollY > 40) return; /* already reading — no prompt */
       cue.classList.add('cue-on');
-      window.addEventListener('scroll', function () {
+      var hide = function () {
         cue.classList.remove('cue-on');
         cue.classList.add('cue-off');
-      }, { once: true, passive: true });
+      };
+      /* any movement dismisses; and it never lingers past a few bobs regardless */
+      window.addEventListener('scroll', hide, { once: true, passive: true });
+      window.addEventListener('touchmove', hide, { once: true, passive: true });
+      window.addEventListener('wheel', hide, { once: true, passive: true });
+      setTimeout(hide, 6000);
     }, 27000);
   }
 
