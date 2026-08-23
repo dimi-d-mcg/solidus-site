@@ -246,7 +246,6 @@ window.SOLIDUS_CONFIG = {
       var t = video.currentTime;
       if (t < last - 5) {
         fired = true;
-        if (!heroActive) return; /* no pinned stage — no prompt */
         if (window.scrollY > 40) return; /* already reading — no prompt */
         cue.classList.add('cue-on');
         window.addEventListener('scroll', function () {
