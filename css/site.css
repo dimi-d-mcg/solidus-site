@@ -206,6 +206,12 @@ a:hover { color: var(--porphyry); }
     position: static;
     padding-bottom: 0;
   }
+  /* the rule belongs to the film's edge: full-bleed hairline directly under the
+     video is the border between film and document; the firm's own top rule
+     would double it and is dropped */
+  .hero { border-bottom: 1px solid var(--hairline); }
+  .firm .section-head { border-top: 0; }
+  .firm .section-head::after { display: none; }
 }
 
 /* ---- Scroll cue — appears when the film ends, dismissed by the first scroll ----
@@ -647,13 +653,15 @@ a:hover { color: var(--porphyry); }
   }
 
   .firm .section-head { grid-column: 1; grid-row: 1; }
-  .firm p { grid-column: 2; }
+  .firm p { grid-column: 2; max-width: none; } /* fill the column — no dead band right of the text */
   .firm .firm-note {
     grid-column: 1;
     grid-row: 2;
     margin-top: 0;
     align-self: start;
+    max-width: none;
   }
+  .register-close { max-width: none; }
 }
 
 /* ---- Reduced motion: the static settled document ---- */
