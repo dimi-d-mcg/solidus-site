@@ -608,6 +608,33 @@ a:hover { color: var(--porphyry); }
 @media (min-width: 3440px) { body { zoom: 2.53; } }
 @media (min-width: 3840px) { body { zoom: 2.6; } }
 
+/* ---- Wide viewports: the document opens its margins ----
+   From 1600px the text sections widen to the compliance band (1008px) and the firm
+   adopts the head-left / body-right register layout. Line measure stays 62ch —
+   the block occupies the sheet; the lines stay readable. */
+
+@media (min-width: 1600px) {
+  .firm,
+  .commodities-intro,
+  .company,
+  .site-footer { max-width: 1008px; }
+
+  .firm > div {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    column-gap: 64px;
+  }
+
+  .firm .section-head { grid-column: 1; grid-row: 1; }
+  .firm p { grid-column: 2; }
+  .firm .firm-note {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0;
+    align-self: start;
+  }
+}
+
 /* ---- Reduced motion: the static settled document ---- */
 
 @media (prefers-reduced-motion: reduce) {
