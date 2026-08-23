@@ -432,11 +432,6 @@ a:hover { color: var(--porphyry); }
   overflow: hidden;
 }
 
-/* Stacked rows read photo-first, matching the pairs */
-@media (max-width: 751px) {
-  .crow .crow-media { order: -1; }
-}
-
 /* ---- Condensed pairs — full spread / pair / full spread / pair cadence ---- */
 
 .crow-pair {
@@ -687,6 +682,20 @@ a:hover { color: var(--porphyry); }
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ---- Stacked rows (last so it wins the cascade): photo-first, left-aligned,
+        full measure — mirroring is a two-column conceit ---- */
+
+@media (max-width: 751px) {
+  .crow .crow-media { order: -1; }
+  .crow-text-mirror,
+  .crow-pair-mirror .pair-item {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .crow-text p,
+  .pair-item p { max-width: none; }
 }
 
 /* ---- Print: the page is a document — print it as one ---- */
