@@ -612,6 +612,8 @@ a:hover { color: var(--porphyry); }
 #commodities,
 #company-details { scroll-margin-top: calc(var(--header-h, 0px) + 24px); }
 
+#top { scroll-margin-top: var(--header-h, 0px); } /* anchor jumps keep the film clear of the letterhead */
+
 /* ---- Large screens: the document scales as a sheet ----
    Composition and measure are locked (664/1008/1200 columns, 62ch); on wide viewports the
    whole sheet enlarges proportionally instead of drowning in Paper. Stepped fallback here;

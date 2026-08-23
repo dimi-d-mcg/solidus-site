@@ -33,6 +33,18 @@
   setHeaderVar();
   window.addEventListener('resize', function () { setupScale(); setHeaderVar(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderVar);
+
+  /* The monogram is "back to the start": true top, clean URL — an anchor jump
+     would tuck the film under the sticky letterhead and pin #top into the URL. */
+  var brand = document.querySelector('.brand');
+  if (brand) {
+    brand.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo(0, 0);
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    });
+  }
+
   setupVideo();
   if (reduce) return; /* static settled document — no pin, no drift, no reveals */
 
@@ -218,15 +230,25 @@
     cue.setAttribute('aria-hidden', 'true');
     cue.innerHTML = '<svg viewBox="0 0 8 44" focusable="false"><line x1="4" y1="2" x2="4" y2="42"/></svg>';
     wrap.appendChild(cue);
-    video.addEventListener('ended', function () {
-      if (!heroActive) return; /* no pinned stage — no prompt */
-      if (window.scrollY > 40) return; /* already reading — no prompt */
-      cue.classList.add('cue-on');
-      window.addEventListener('scroll', function () {
-        cue.classList.remove('cue-on');
-        cue.classList.add('cue-off');
-      }, { once: true, passive: true });
-    }, { once: true });
+    /* the film loops, so 'ended' never fires — the cue appears when the first
+       loop completes (currentTime wraps back toward zero) */
+    var last = 0;
+    var fired = false;
+    video.addEventListener('timeupdate', function () {
+      if (fired) return;
+      var t = video.currentTime;
+      if (t < last - 5) {
+        fired = true;
+        if (!heroActive) return; /* no pinned stage — no prompt */
+        if (window.scrollY > 40) return; /* already reading — no prompt */
+        cue.classList.add('cue-on');
+        window.addEventListener('scroll', function () {
+          cue.classList.remove('cue-on');
+          cue.classList.add('cue-off');
+        }, { once: true, passive: true });
+      }
+      last = t;
+    });
   }
 
   /* Hero film — wired once the asset exists (SOLIDUS_CONFIG.heroFilmSrc).
@@ -247,8 +269,9 @@
     v.muted = true;
     v.playsInline = true;
     v.setAttribute('playsinline', '');
+    v.setAttribute('autoplay', '');
     v.setAttribute('aria-label', 'Solidus Commodities');
-    v.loop = false;
+    v.loop = true; /* the film runs continuously */
     v.preload = 'auto';
     if (media) box.replaceChild(v, media); else box.appendChild(v);
     if (!reduce) wireScrollCue(v);
@@ -261,6 +284,13 @@
     } else {
       var p = v.play();
       if (p && p.catch) p.catch(function () {});
+      /* mobile browsers sometimes reject the first early play(); retry once ready */
+      v.addEventListener('canplay', function () {
+        if (v.paused) {
+          var r = v.play();
+          if (r && r.catch) r.catch(function () {});
+        }
+      }, { once: true });
     }
   }
 })();
