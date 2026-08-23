@@ -8,9 +8,14 @@ Built from the design handoff `design_handoff_solidus_site` (art direction DB000
 verbatim per SC/BRD/CP0001 v1.2, 22 Aug 2026). **No text may be added without sign-off.**
 Em-dashes (—) are deliberate placeholders that fill at incorporation — never "TBD".
 
-## Stack
+## Stack & deployment
 
-Static — no build step, no dependencies. Deploy by copying the folder to any static host.
+Static — no build step, no dependencies. Live at https://soliduscommodities.com via GitHub
+Pages (repo `dimi-d-mcg/solidus-site`). **Pipeline: every push to `main` deploys automatically**
+(`.github/workflows/deploy.yml`, actions/deploy-pages). DNS at Namecheap: apex A records to
+GitHub Pages (185.199.108–111.153), `www` CNAME to `dimi-d-mcg.github.io`;
+soldiuscommodities.com (typo domain, brand protection) 301-redirects here.
+When editing `css/site.css` or `js/site.js`, bump the `?v=` cache-buster in index.html.
 
 - `index.html` — the page (all copy verbatim)
 - `css/site.css` — locked palette, Fraunces/Archivo, layout
@@ -23,8 +28,8 @@ Fonts load from the Google Fonts CDN (Fraunces variable + Archivo variable).
 
 1. Fill the em-dash placeholders in `index.html` (licence no., DPMS reg., registered office,
    e-mail domains) and make the two e-mail values `mailto:` links.
-2. At deploy: make `og:image` an absolute URL on the live domain (crawlers ignore relative
-   paths), and set a canonical URL.
+2. Done at deploy: absolute `og:image`, `og:url`, and canonical are set to
+   https://soliduscommodities.com/.
 
 The hero film is wired (`SOLIDUS_CONFIG` block at the bottom of `index.html`): 21:9, 30s,
 plays once, rests on its logo end frame. Web encodes in `assets/media/` — 1920w (9.3 MB) and
