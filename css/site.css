@@ -188,7 +188,26 @@ a:hover { color: var(--porphyry); }
 }
 
 .hero-box img { object-fit: contain; } /* lockup ground is Paper — frames seamlessly */
-.hero-box video { object-fit: cover; }
+.hero-box video {
+  object-fit: cover;
+  transition: opacity 0.6s ease-out;
+}
+
+/* Portrait: the film takes the plate format (4:5, like the commodity photographs),
+   cover-cropped to its cinematic centre. The wide lockup end frame cannot survive
+   that crop, so on ended the film fades to the monogram — the design's own
+   placeholder state — via .film-done (JS, static-hero mode only). */
+.hero-box video.film-done { opacity: 0; }
+
+.monogram-hero { font-size: clamp(48px, 17vw, 80px); }
+
+@media (max-width: 751px), (orientation: portrait) {
+  .hero-sticky { padding: 40px 28px; }
+  .hero-box {
+    aspect-ratio: 4 / 5;
+    max-width: 460px;
+  }
+}
 
 /* ---- Scroll cue — appears when the film ends, dismissed by the first scroll ----
    No text over the film and no icons: the cue is the house device, a rule with round

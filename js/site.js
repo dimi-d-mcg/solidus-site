@@ -228,6 +228,9 @@
     /* min dimension, so landscape phones also get the small encode */
     if (filmSmall && Math.min(window.innerWidth, window.innerHeight) <= 768) film = filmSmall;
     if (!film) return; /* framed poster stays */
+    /* reduced motion on a portrait stage: the cover-cropped film has nothing to
+       offer — keep the framed lockup image as the settled state */
+    if (reduce && !shouldPin()) return;
     var box = document.querySelector('[data-hero-box]');
     var media = document.querySelector('[data-hero-media]');
     if (!box) return;
@@ -242,6 +245,15 @@
     v.loop = false;
     v.preload = 'auto';
     if (media) box.replaceChild(v, media); else box.appendChild(v);
+    /* the settle mark behind the film — revealed when a portrait film fades out */
+    var mark = document.createElement('span');
+    mark.className = 'monogram monogram-hero';
+    mark.setAttribute('aria-hidden', 'true');
+    mark.innerHTML = 'S<svg class="slash" viewBox="0 0 40 96" aria-hidden="true" focusable="false"><line x1="3.5" y1="93" x2="36.5" y2="3"></line></svg>C';
+    box.insertBefore(mark, v);
+    v.addEventListener('ended', function () {
+      if (!heroActive) v.classList.add('film-done'); /* portrait settle: film fades to the mark */
+    });
     if (!reduce) wireScrollCue(v);
     if (reduce) {
       var rest = function () {
