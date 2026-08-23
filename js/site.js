@@ -1,6 +1,13 @@
 /* Solidus Commodities — motion layer (DB0002 v2).
    The page is authored fully static; this file layers motion as progressive enhancement.
    Every reveal fires once; prefers-reduced-motion collapses everything to the settled document. */
+
+/* Hero film wiring — lives here (not inline) so the CSP can stay script-src 'self'. */
+window.SOLIDUS_CONFIG = {
+  heroFilmSrc: 'assets/media/hero-film-1920.mp4',
+  heroFilmSrcSmall: 'assets/media/hero-film-1280.mp4',
+  heroPosterSrc: 'assets/media/hero-poster-1920.jpg'
+};
 (function () {
   'use strict';
 
