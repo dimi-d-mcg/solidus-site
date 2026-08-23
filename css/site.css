@@ -220,12 +220,19 @@ a:hover { color: var(--porphyry); }
 
 .scroll-cue {
   /* fixed, not absolute: the sticky stage hangs below the fold by the header's
-     height until the pin engages, which would push an absolute cue off-screen */
+     height until the pin engages, which would push an absolute cue off-screen.
+     A cut-paper tag: legible over film and paper alike. */
   position: fixed;
-  bottom: 28px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--paper);
+  border: 1px solid var(--hairline);
   opacity: 0;
   transition: opacity 0.4s ease-out;
   pointer-events: none;
@@ -234,32 +241,37 @@ a:hover { color: var(--porphyry); }
 .scroll-cue.cue-on { opacity: 1; }
 .scroll-cue.cue-off { opacity: 0; }
 
-.scroll-cue svg {
+.cue-label {
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.cue-arrow {
   display: block;
-  width: 8px;
-  height: 44px;
+  width: 14px;
+  height: 19px;
   overflow: visible;
 }
 
-.scroll-cue line {
+.cue-arrow path {
+  fill: none;
   stroke: var(--porphyry);
   stroke-width: 2.5;
   stroke-linecap: round;
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
+  stroke-linejoin: round;
 }
 
-.scroll-cue.cue-on line {
-  animation: cue-draw 2.4s ease-out infinite;
+.scroll-cue.cue-on .cue-arrow {
+  animation: cue-bob 1.6s ease-in-out infinite;
 }
 
-@keyframes cue-draw {
-  0%   { stroke-dashoffset: 40; opacity: 0; }
-  12%  { opacity: 1; }
-  45%  { stroke-dashoffset: 0; opacity: 1; }
-  70%  { stroke-dashoffset: 0; opacity: 1; }
-  92%  { stroke-dashoffset: 0; opacity: 0; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
+@keyframes cue-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
 }
 
 /* ---- Reveal machinery ----

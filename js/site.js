@@ -235,7 +235,7 @@ window.SOLIDUS_CONFIG = {
     var cue = document.createElement('div');
     cue.className = 'scroll-cue';
     cue.setAttribute('aria-hidden', 'true');
-    cue.innerHTML = '<svg viewBox="0 0 8 44" focusable="false"><line x1="4" y1="2" x2="4" y2="42"/></svg>';
+    cue.innerHTML = '<span class="cue-label">Scroll</span><svg class="cue-arrow" viewBox="0 0 16 22" focusable="false"><path d="M8 2v16M2.5 13.5 8 19l5.5-5.5"/></svg>';
     wrap.appendChild(cue);
     /* a plain timer — 27s after load, roughly the film's first pass — so the cue
        appears even where autoplay is blocked (e.g. iOS Low Power Mode) */
