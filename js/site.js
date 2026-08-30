@@ -6,7 +6,12 @@
 window.SOLIDUS_CONFIG = {
   heroFilmSrc: 'assets/media/hero-film-1920.mp4',
   heroFilmSrcSmall: 'assets/media/hero-film-1280.mp4',
-  heroPosterSrc: 'assets/media/hero-poster-1920.jpg'
+  heroPosterSrc: 'assets/media/hero-poster-1920.jpg',
+  /* Cookieless analytics harness — inert until an endpoint is set.
+     e.g. GoatCounter: 'https://CODE.goatcounter.com/count'
+     Enabling also requires adding the endpoint's origin to img-src in the CSP
+     (index.html meta tag). No cookies, no identifiers, one pageview beacon. */
+  analyticsEndpoint: ''
 };
 (function () {
   'use strict';
@@ -35,6 +40,16 @@ window.SOLIDUS_CONFIG = {
   function shouldPin() {
     return window.innerWidth > window.innerHeight && window.innerWidth >= 752;
   }
+
+  /* Pageview beacon — fires once per load, only when an endpoint is configured.
+     Image beacon: no cookies, no fingerprinting, nothing identifying sent. */
+  (function () {
+    var ep = (config.analyticsEndpoint || '').trim();
+    if (!ep) return;
+    var img = new Image();
+    img.src = ep + '?p=' + encodeURIComponent(location.pathname) +
+      (document.referrer ? '&r=' + encodeURIComponent(document.referrer) : '');
+  })();
 
   setupScale();
   setHeaderVar();

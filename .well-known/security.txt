@@ -1,0 +1,4 @@
+Contact: mailto:compliance@soliduscommodities.com
+Expires: 2027-08-23T00:00:00.000Z
+Canonical: https://soliduscommodities.com/.well-known/security.txt
+Preferred-Languages: en
