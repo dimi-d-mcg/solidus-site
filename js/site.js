@@ -241,10 +241,11 @@ window.SOLIDUS_CONFIG = {
     });
   }
 
-  /* Scroll cue — when the film ends, a rule draws itself downward at the bottom of the
-     stage (the house device; no text over the film, no icons). The first scroll, or the
-     film ending mid-scrub, dismisses it permanently. */
-  function wireScrollCue(video) {
+  /* Scroll cue — a cut-paper SCROLL tag with a drawn arrow, fixed bottom-centre.
+     Timer-driven (27s, roughly the film's first pass) so it works where autoplay is
+     blocked; suppressed if the visitor has already scrolled; dismissed by any
+     movement or after 6s regardless. */
+  function wireScrollCue() {
     var wrap = document.querySelector('[data-hero-sticky]');
     if (!wrap) return;
     var cue = document.createElement('div');
@@ -269,8 +270,8 @@ window.SOLIDUS_CONFIG = {
     }, 27000);
   }
 
-  /* Hero film — wired once the asset exists (SOLIDUS_CONFIG.heroFilmSrc).
-     Plays once, muted, inline; rests on its final logo frame. No text over the film, ever. */
+  /* Hero film — wired from SOLIDUS_CONFIG.heroFilmSrc (small encode on small stages).
+     Loops muted and inline; under reduced motion it holds its final logo frame instead. */
   function setupVideo() {
     var film = (config.heroFilmSrc || '').trim();
     var filmSmall = (config.heroFilmSrcSmall || '').trim();
@@ -287,19 +288,20 @@ window.SOLIDUS_CONFIG = {
     v.muted = true;
     v.playsInline = true;
     v.setAttribute('playsinline', '');
-    v.setAttribute('autoplay', '');
     v.setAttribute('aria-label', 'Solidus Commodities');
     v.loop = true; /* the film runs continuously */
     v.preload = 'auto';
     if (media) box.replaceChild(v, media); else box.appendChild(v);
-    if (!reduce) wireScrollCue(v);
+    if (!reduce) wireScrollCue();
     if (reduce) {
+      /* no autoplay attribute here: reduced motion gets a still — the logo end frame */
       var rest = function () {
         try { v.currentTime = Math.max(0, (v.duration || 0) - 0.05); } catch (e) {}
       };
       if (v.readyState >= 1) rest();
       else v.addEventListener('loadedmetadata', rest, { once: true });
     } else {
+      v.setAttribute('autoplay', '');
       var p = v.play();
       if (p && p.catch) p.catch(function () {});
       /* mobile browsers sometimes reject the first early play(); retry once ready */

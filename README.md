@@ -14,10 +14,14 @@ incorporation — never "TBD".
 
 Static — no build step, no dependencies. Live at https://soliduscommodities.com via GitHub
 Pages (repo `dimi-d-mcg/solidus-site`). **Pipeline: every push to `main` deploys automatically**
-(`.github/workflows/deploy.yml`, actions/deploy-pages). DNS at Namecheap: apex A records to
-GitHub Pages (185.199.108–111.153), `www` CNAME to `dimi-d-mcg.github.io`;
-soldiuscommodities.com (typo domain, brand protection) 301-redirects here.
-When editing `css/site.css` or `js/site.js`, bump the `?v=` cache-buster in index.html.
+through GitHub's native branch build ("pages build and deployment" in the Actions tab);
+`.nojekyll` keeps files served raw (needed for `.well-known/`). DNS at Namecheap: apex A
+records to GitHub Pages (185.199.108–111.153), `www` CNAME to `dimi-d-mcg.github.io`, plus the
+Search Console verification TXT (keep it); soldiuscommodities.com (typo domain, brand
+protection) 301-redirects here.
+When editing `css/site.css` or `js/site.js`, bump the `?v=` cache-buster in index.html
+(and the CSS one in 404.html). A strict CSP is set as a meta tag: no inline scripts or styles
+anywhere — put styles in site.css and script in site.js.
 
 - `index.html` — the page (all copy verbatim)
 - `css/site.css` — locked palette, Fraunces/Archivo, layout

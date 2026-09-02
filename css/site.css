@@ -214,9 +214,9 @@ a:hover { color: var(--porphyry); }
   .firm .section-head::after { display: none; }
 }
 
-/* ---- Scroll cue — appears when the film ends, dismissed by the first scroll ----
-   No text over the film and no icons: the cue is the house device, a rule with round
-   terminals that draws itself downward. JS-created; never present under reduced motion. */
+/* ---- Scroll cue — a cut-paper tag (SCROLL + drawn arrow), fixed bottom-centre ----
+   JS-created on a timer after load; dismissed by movement or after a few bobs.
+   Never present under reduced motion. */
 
 .scroll-cue {
   /* fixed, not absolute: the sticky stage hangs below the fold by the header's
@@ -541,7 +541,7 @@ a:hover { color: var(--porphyry); }
   flex: 1 1 220px;
   min-width: 220px;
   position: sticky;
-  top: var(--header-h, 0px); /* holds below the sticky letterhead */
+  top: var(--header-h, 73px); /* holds below the sticky letterhead; fallback ≈ header height without JS */
   background: var(--paper);
   padding-bottom: 8px;
 }
@@ -639,9 +639,18 @@ a:hover { color: var(--porphyry); }
 /* ---- Anchors land clear of the top edge ---- */
 
 #commodities,
-#company-details { scroll-margin-top: calc(var(--header-h, 0px) + 24px); }
+#company-details { scroll-margin-top: calc(var(--header-h, 73px) + 24px); }
 
-#top { scroll-margin-top: var(--header-h, 0px); } /* anchor jumps keep the film clear of the letterhead */
+#top { scroll-margin-top: var(--header-h, 73px); } /* anchor jumps keep the film clear of the letterhead */
+
+/* ---- 404 page stage (404.html has no inline styles: the CSP forbids them) ---- */
+
+.nf-stage {
+  max-width: 664px;
+  margin: 0 auto;
+  padding: 128px 28px 96px;
+  box-sizing: content-box;
+}
 
 /* ---- Large screens: the document scales as a sheet ----
    Composition and measure are locked (664/1008/1200 columns, 62ch); on wide viewports the
