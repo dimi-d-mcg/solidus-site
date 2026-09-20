@@ -28,7 +28,7 @@ anywhere — put styles in site.css and script in site.js.
 - `js/site.js` — motion layer (progressive enhancement; page is fully usable without it)
 - `assets/img/` — web-sized brand artwork (masters live outside the repo)
 
-Fonts load from the Google Fonts CDN (Fraunces variable + Archivo variable).
+Fonts are self-hosted from `assets/fonts/` (see Launch checklist below).
 
 ## At incorporation
 
@@ -38,7 +38,7 @@ Fonts load from the Google Fonts CDN (Fraunces variable + Archivo variable).
    https://soliduscommodities.com/.
 
 The hero film is wired (`SOLIDUS_CONFIG` block at the bottom of `index.html`): 21:9, 30s,
-plays once, rests on its logo end frame. Web encodes in `assets/media/` — 1920w (9.3 MB) and
+loops continuously (client change, Aug 2026). Web encodes in `assets/media/` — 1920w (9.3 MB) and
 1280w (5.0 MB, served ≤768px viewports) H.264/faststart, poster = extracted end frame.
 The 42.6 MB HEVC master stays on the Desktop (`hf_20260822_130411_*.mp4`).
 
@@ -51,10 +51,10 @@ section rules draw in (a Paper cover retracting) as sections arrive; commodity r
 choreography — numeral, name, line at 90ms steps while the photograph settles (1.04→1) into its
 frame; compliance rules draw with the stamps (90ms stagger, cap 450ms). Company details and the
 footer stay perfectly still — the page ends as a document at rest.
-When the film ends, a scroll cue appears bottom-centre — the house device (a Porphyry rule with
-round terminals) drawing itself downward on a 2.4s loop; no text over the film, no icons. It is
+A scroll cue appears bottom-centre 27s after load: a cut-paper tag reading SCROLL with a drawn
+Porphyry arrow (client-directed redesign). It is
 position:fixed (the sticky stage hangs below the fold pre-pin), suppressed if the viewer has
-already scrolled, and the first scroll dismisses it permanently.
+already scrolled; any movement dismisses it and it auto-hides after 6s regardless.
 `prefers-reduced-motion` (or no JS) collapses everything to the static settled document.
 
 ## Large screens
