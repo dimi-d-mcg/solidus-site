@@ -1,3 +1,41 @@
+/* ---- Typefaces: self-hosted (OFL). No third-party requests leave the site. ---- */
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/archivo-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/fraunces-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* Solidus Commodities DMCC — one-page site.
    Palette and rules locked per SC/BRD/CP0001 v1.2 + DB0002 v2: five colours, no gradients,
    no shadows, no blur, no dark mode, radius 0 (2px inputs only). */
@@ -731,3 +769,26 @@ a:hover { color: var(--porphyry); }
   .crow-frame { break-inside: avoid; }
   .register-row { break-inside: avoid; }
 }
+
+/* ---- Document pages (privacy, terms): the register voice, one column ---- */
+
+.doc-page {
+  max-width: 664px;
+  margin: 0 auto;
+  padding: 80px 28px 0;
+  box-sizing: content-box;
+}
+
+.doc-page p { margin: 0 0 1em; max-width: 62ch; }
+.doc-page .section-head { margin-top: 44px; }
+.doc-page .section-head:first-of-type { margin-top: 0; }
+
+.doc-meta {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+
+.footer-links { margin-top: 10px; }
+.footer-links a { color: var(--muted); }
+.footer-links a:hover { color: var(--porphyry); }

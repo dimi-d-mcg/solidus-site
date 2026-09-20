@@ -88,3 +88,15 @@ py -m http.server 4573
 ```
 
 then open http://localhost:4573
+
+## Launch checklist (20 Sep 2026)
+
+- Typefaces are **self-hosted** (`assets/fonts/*.woff2`, OFL; latin + latin-ext subsets from the
+  Google Fonts variable builds). The site makes no third-party requests at all, so no cookie
+  banner is needed and the privacy notice can say so truthfully. Do not reintroduce the Google
+  Fonts CDN link.
+- `privacy.html` and `terms.html` (linked from the footer, clean URLs `/privacy` and `/terms`).
+  Draft legal copy for client/legal sign-off.
+- CSP is now fully `'self'` (style-src and font-src included).
+- No forms on the site, so no spam surface; email addresses are deliberately plain for the
+  compliance audience and rely on mailbox-side filtering.
